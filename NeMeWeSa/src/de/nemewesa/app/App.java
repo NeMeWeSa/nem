@@ -11,7 +11,7 @@ public class App {
 	
 	public static final int PLAYER_AP = 20;
 	// Legt fest, ob Statusausgeben angezeigt werden sollen.
-	public static final boolean DEV_MODE = false;
+	public static final boolean DEV_MODE = true;
 	
 	private Player player;
 	private Level level;
