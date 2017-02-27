@@ -97,7 +97,7 @@ public class Console {
 		System.out.println("Dein aktueller Planet > " + player.getCurrentPlanet().name);
 		System.out.println("Dein aktuelles Sonnensystem > " + player.getCurrentPlanet().parent.name);
 		System.out.println("Dein aktueller Sektor > " + player.getCurrentPlanet().parent.parent.name + "\n");
-		mainmenu(player);
+		actions(player);
 		
 	}
 	
