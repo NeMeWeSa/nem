@@ -11,7 +11,7 @@ public class App {
 	
 	public static final int PLAYER_AP = 20;
 	// Legt fest, ob Statusausgeben angezeigt werden sollen.
-	public static final boolean DEV_MODE = true;
+	public static final boolean DEV_MODE = false;
 	
 	private Player player;
 	private Level level;
@@ -37,10 +37,10 @@ public class App {
 		runTests();
 		
 		// Timeout fuer blockierende Spieler
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new RoundTimer(), 2000, 30000);
+		//Timer timer = new Timer();
+		//timer.scheduleAtFixedRate(new RoundTimer(), 2000, 30000);
 		
-		loginUser();
+		//loginUser();
 		
 	}
 
@@ -60,7 +60,8 @@ public class App {
 		player.addOwnership(player.getHomePlanet());
 	
 		System.out.println(prefix + "Willkommen im NeMeWeSa " + player.getName());
-		System.out.println(player);
+		if(DEV_MODE)		
+			System.out.println(player);
 	
 	}
 	
@@ -84,10 +85,10 @@ public class App {
 	public void runTests(){
 		
 		//this.round.setNewRound();
+
+
 		
-		System.out.println(player.getCurrentPlanet().name);
-		System.out.println(player.getCurrentPlanet().parent.name);
-		System.out.println(player.getCurrentPlanet().parent.parent.name + "\n");
+		console.mainmenu(player);
 		
 		
 		/*

@@ -10,7 +10,7 @@ public class RoundTimer extends TimerTask {
 	public void run() {
 		
 		//System.out.println("Es ist Zeit fuer eine neue Runde");
-		this.round.setNewRound();		
+		this.round.setNewRound();	
 	}
 
 }
