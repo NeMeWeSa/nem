@@ -1,53 +1,101 @@
-package de.nemewesa.level;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-
-import javax.annotation.Resources;
-
-import de.nemewesa.app.Observer;
-import de.nemewesa.app.Round;
-import de.nemewesa.helper.Helper;
-import de.nemewesa.modules.Defence;
-
-public class Planet implements Generetable, Observer, Serializable{
-	
-	public static Object resourceName;
-	public Moon moonName;
-	public int citizen;
-	public SpaceStation stationName;
-	public Defence defenceName;
-	public boolean captured = false;
-	public String name;
-	public Round round;
-	public int storage;
-	// size des planeten zwischen
-	public int size;
-	public Solarsystem parent;
-	public String[] firstname = {"Ben", "Pe", "To", "Jau", "Ja", "Ter", "Masz", "Res", "Min", "Ro", "Sen", "Ta", "Bue", "Ur", "Ban", "Iak", "Dzi", "Ko", "Wi", "Cki"};
-/* 
- * wenn das raumschiff zb. 10 plaetze frei hat
- * laesst sich ueber den space festlegen wieviel man tragen kann
- * Name, value, amount, farm, space, grow(in steps), dropChance, storage, storagef
- * amount legt fest wieviel es MAXIMAL geben kann
- * farm ist zum arbeiten gedacht
+ * 		Wuerfel (1-100) unter 60: dieser Planet hat Silber Vorkommen
+ * 		Wuerfel (1-100) unter 45: dieser Planet hat Gold Vorkommen
+ * 		Wuerfel (1-100) unter 15: dieser Planet hat Juwelen Vorkommen
+ * 	
+ * 		Sollte es eine Ressource auf dem Planeten geben, so wird wieder zufaellig entschieden wieviel Rohstoff 
+ * 		vorhanden ist.
  * 
- * storage legt fest wieviel maximal geladen werden kann
- * storagef dann zum arbeiten
+ * 		Bronze: mindestens 15 --- maximal 70
+ * 		Silber: mindestens 10 --- maximal 60
+ * 		Bronze: mindestens 5 --- maximal 50
+ * 		Bronze: mindestens 1 --- maximal 25
  */
-	public Resource bronze = new Resource("Bronze", 1, 0, 0, 2, 8, 85, 0, 0);
-	public Resource silver = new Resource("Silber", 2, 0, 0,  2, 10, 60, 0, 0);
-	public Resource gold = new Resource("Gold", 3, 0, 0, 2, 12, 45, 0, 0);
-	public Resource jewel= new Resource("Juwel", 5, 0, 0, 1, 14, 15, 0, 0);
+		if(Helper.random(0, 100)<bronze.dropRate) {
+			this.bronze.amount = Helper.random(15, 70);
+			this.bronze.farm = this.bronze.amount;
+			this.bronze.storage = this.citizen*4;
+		}
+		if(Helper.random(0, 100)<silver.dropRate) {
+			this.silver.amount = Helper.random(10, 60);
+			this.silver.farm = this.silver.amount;
+			this.silver.storage = this.citizen*4;
+		}
+		if(Helper.random(0, 100)<gold.dropRate) { 
+			this.gold.amount = Helper.random(5, 50);
+			this.gold.farm = this.gold.amount;
+			this.gold.storage = this.citizen*4;
+		}
+		if(Helper.random(0, 100)<jewel.dropRate) {
+			this.jewel.amount = Helper.random(1, 25);
+			this.jewel.farm = this.jewel.amount;
+			this.jewel.storage = this.citizen*4;
+		}
+	}
 	
+/*
+ * Hier wird nach jeder runde der Rohstoff neu generiert 
+ * Die kriterien sind hier:
+ * 			Bronze: alle 8 Runden
+ * 			Silber:	alle 10 Runden
+ * 			Gold:	alle 12 Runden
+ * 			Juwel:	alle 14 Runden
+ */
+	public void generateResource() {
+		if(this.bronze.farm<this.bronze.amount && round.getRound() % bronze.grow == 0) {
+			bronze.farm +=1;					
+		}
+		if(this.silver.farm<this.silver.amount && round.getRound() % silver.grow == 0) {
+			silver.farm +=1;					
+		}
+		if(this.gold.farm<this.gold.amount && round.getRound() % gold.grow == 0) {
+			gold.farm +=1;					
+		}
+		if(this.bronze.farm<this.bronze.amount && round.getRound() % bronze.grow == 0) {
+			bronze.farm +=1;					
+		}
+		if(this.jewel.farm<this.jewel.amount && round.getRound() % jewel.grow == 0) {
+			jewel.farm +=1;					
+		}
+	}		
+/*
+ * Mit den einzelnen Methoden wird ein Rohstoff abgearbeitet und dann in dem storage "storagef" eingefuegt"
+ * Es wird kontrolliert ob der jeweilige Rohstoff ueberhaupt vorhanden ist durch die "farm" variable
+ * Ausserdem wird sichergestellt das man nicht mehr farmen kann als vorhanden
+ */
+	public void mineBronze() {
+		if(this.bronze.farm > 0) {
+			this.bronze.farm -= 1;
+			this.bronze.storagef += 1;
+		}
+	}
 	
-	public Planet(String name, Solarsystem parent) {
-		this.name = generateName();
-		this.parent = parent;
-		this.size = Helper.random(100, 1000);
-		this.citizen = Helper.random(20, 80);
-		this.round  = Round.getRoundInstance();
-		this.round.registerObserver(this);
+	public void mineSilver() {
+		if(this.silver.farm > 0) {
+			this.silver.farm -= 1;
+			this.silver.storagef += 1;
+		}
+	}
+	
+	public void mineGold() {
+		if(this.gold.farm > 0) {
+			this.gold.farm -= 1;
+			this.gold.storagef += 1;
+		}
+	}
+	
+	public void mineJewel() {
+		if(this.jewel.farm > 0) {
+			this.jewel.farm -= 1;
+			this.jewel.storagef += 1;
+		}
+	}
+	
+
+/*
+ * Mit income() wird (sobald der Planet eingenommen wurde) angewiesen mit jeden aufruf selbst zu farmen
+ * Es wird kontrolliert ob die der farm vorhanden ist und nicht unter Null ist
+ * Anschliessend wird ueberprueft ob das "leeere Lager" nicht dem Maximalen Lager (das moegliche Lager = einwohner x 4) ueberschreitet
+ * dann wird ein viertel  der Einwohner jeweils ein Rohstoff (wenn vorhanden) abarbeiten
 /*
  * Hier wird dem Planet mit einem W100 zufaellig zugewiesen ob dieser Planet ueberhaupt Rohstoffe hat
  * 		Wuerfel (1-100) unter 85: dieser Planet hat Bronze Vorkommen
