@@ -1,3 +1,4 @@
+
 package de.nemewesa.level;
 
 import java.io.Serializable;
@@ -25,7 +26,8 @@ public class Planet implements Generetable, Observer, Serializable{
 	public int size;
 	public Solarsystem parent;
 	public String[] firstname = {"Ben", "Pe", "To", "Jau", "Ja", "Ter", "Masz", "Res", "Min", "Ro", "Sen", "Ta", "Bue", "Ur", "Ban", "Iak", "Dzi", "Ko", "Wi", "Cki"};
-
+	public ArrayList<Resource> resource;
+	
 /* 
  * wenn das raumschiff zb. 10 plaetze frei hat
  * laesst sich ueber den space festlegen wieviel man tragen kann

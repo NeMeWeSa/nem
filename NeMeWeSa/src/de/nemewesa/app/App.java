@@ -5,13 +5,14 @@ import java.util.Timer;
 import de.nemewesa.character.Player;
 import de.nemewesa.db.DB;
 import de.nemewesa.level.Level;
+import de.nemewesa.spaceships.Transporter;
 
 
 public class App {
 	
 	public static final int PLAYER_AP = 20;
 	// Legt fest, ob Statusausgeben angezeigt werden sollen.
-	public static final boolean DEV_MODE = true;
+	public static final boolean DEV_MODE = false;
 	
 	private Player player;
 	private Level level;
@@ -37,10 +38,10 @@ public class App {
 		runTests();
 		
 		// Timeout fuer blockierende Spieler
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new RoundTimer(), 2000, 30000);
+		//Timer timer = new Timer();
+		//timer.scheduleAtFixedRate(new RoundTimer(), 2000, 30000);
 		
-		loginUser();
+		//loginUser();
 		
 	}
 
@@ -144,6 +145,8 @@ public class App {
 		// Peters Teil.
 		// Erstellte Objekte um zu schauen ob die methoden funktionieren
 
+		//Transporter donkey = new Transporter("donkey","transporter",100,100,100,resources,"");
+		
 		/*
 		SpaceStation alpha = new SpaceStation();
 		alpha.stationName = "alpha";
